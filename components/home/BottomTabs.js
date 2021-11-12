@@ -1,18 +1,27 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { bottomTabIcons } from '../../data/bottomTabIcons'
 
-const BottomTabs = ({ icons }) => {
+const icons = bottomTabIcons;
+
+const BottomTabs = ({ navigation }) => {
     const [ activeTab, setActiveTab ] = useState('Home')
 
     const Icon = ({ icon }) => (
-        <TouchableOpacity onPress={() => setActiveTab(icon.name)}>
+        <TouchableOpacity
+            onPress={() => {
+                setActiveTab(icon.name); 
+                icon.name === 'Profile' ? navigation.push('ProfileScreen') : '';
+            }}
+        >
             <Image
                 source={{ uri: activeTab === icon.name? icon.active : icon.inactive}}
                 style={[
                     styles.icon,
                     icon.name === 'Profile' ? styles.profilePic() : null,
                     activeTab === 'Profile' && icon.name === activeTab ? styles.profilePic(activeTab) : null,
-                ]}/>
+                ]}
+            />
         </TouchableOpacity>
     )
     return (
@@ -25,6 +34,7 @@ const BottomTabs = ({ icons }) => {
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     wrapper: {

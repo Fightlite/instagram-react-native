@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import { USERS } from '../../data/users'
 
@@ -12,10 +12,12 @@ const Stories = () => {
             >
                 {USERS.map((story, index) => (
                     <View key={index} style={{ alignItems: 'center', marginLeft: 10 }}>
-                        <Image source={{uri: story.image}} style={styles.story} />
+                        <TouchableOpacity>
+                            <Image source={{uri: story.image}} style={styles.story} />
+                        </TouchableOpacity>
                         <Text style={{ color: 'white' }}>
-                            { story.user.length > 10 ?
-                            story.user.slice(0, 9).toLowerCase() + '...' : story.user.toLowerCase() }
+                            { story.user.length > 8 ?
+                                story.user.slice(0, 8).toLowerCase() + '...' : story.user.toLowerCase() }
                         </Text>
                     </View>
                 ))}

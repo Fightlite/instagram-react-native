@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TextInput, Image, Text, Button } from 'react-native'
+import { View, TextInput, Image, Text, Button, TouchableOpacity } from 'react-native'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import validUrl from 'valid-url'
@@ -10,7 +10,7 @@ import firebase from 'firebase/compat/app';
 const PLACEHOLDER_IMG = 'https://flatsome3.uxthemes.com/wp-content/uploads/woocommerce-placeholder.png'
 
 const uploadPostSchema = Yup.object().shape({
-    imageUrl: Yup.string().url().required('A URL is required'),
+    imageUrl: Yup.string().url().required('An image url is required'),
     caption: Yup.string().max(2200, 'Caption has reached the character')
 })
 
@@ -38,21 +38,23 @@ const FormUploader = ({navigation}) => {
     }, [])
 
     const uploadPostToFirebase = ( imageUrl, caption ) => {
-        const unsubscribe = db.collection('users')
-            .doc(auth.currentUser.email)
-            .collection('posts')
+        const unsubscribe = db.collection('posts')
             .add({
+                userId: auth.currentUser.uid,
                 imageUrl: imageUrl,
                 caption: caption,
                 user: currentLoggedInUser.username,
                 profile_picture: currentLoggedInUser.profilePicture,
-                user_uid: auth.currentUser.uid,
                 user_email: auth.currentUser.email,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 likes_by_users: [],
                 comments: [],
             })
             .then(() => navigation.goBack())
+            .catch((error) => {
+                console.log('Something went wrong with added post to firestore.', error);
+            });
+
         return unsubscribe
     }
 
@@ -89,7 +91,7 @@ const FormUploader = ({navigation}) => {
                     </View>
                     <TextInput
                         onChange={e => setThumbnailUrl(e.nativeEvent.text)}
-                        style={{ color: 'white', fontSize:18 }}
+                        style={{ color: 'white', fontSize: 18, paddingHorizontal: 10 }}
                         placeholder='Enter image url'
                         placeholderTextColor='gray'
                         onChangeText={handleChange('imageUrl')}
@@ -97,16 +99,27 @@ const FormUploader = ({navigation}) => {
                         value={values.imageUrl}
                     />
                     {errors.imageUrl && (
-                        <Text style={{ color: 'red', fontSize: 15 }}>
+                        <Text style={{ color: 'red', fontSize: 16, paddingTop: 5, paddingHorizontal: 10 }}>
                             {errors.imageUrl}
                         </Text>
                     )}
-
-                    <Button
-                        onPress={handleSubmit}
-                        title='Share'
+                    <TouchableOpacity
+                        style={{ borderColor: '#fff',
+                        borderWidth: 1,
+                        borderRadius: 10,
+                        paddingVertical: 5,
+                        paddingHorizontal: 5,
+                        marginHorizontal: 140,
+                        marginTop: 10,
+                        }}
                         disabled={!isValid}
-                    />
+                    >
+                        <Button
+                            onPress={handleSubmit}
+                            title='Share'
+                            disabled={!isValid}
+                        />
+                    </TouchableOpacity>
                 </>
             )}
         </Formik>

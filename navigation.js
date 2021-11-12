@@ -5,6 +5,8 @@ import HomeScreen from './screens/HomeScreen'
 import NewPostScreen from './screens/NewPostScreen'
 import LoginScreen from './screens/LoginScreen'
 import SignupScreen from './screens/SignupScreen'
+import ProfileScreen from './screens/ProfileScreen'
+
 
 const Stack = createStackNavigator()
 
@@ -20,6 +22,7 @@ export const SignedInStack = () => (
         >
             <Stack.Screen name='HomeScreen' component={HomeScreen}/>
             <Stack.Screen name='NewPostScreen' component={NewPostScreen}/>
+            <Stack.Screen name='ProfileScreen' component={ProfileScreen}/>
         </Stack.Navigator>
     </NavigationContainer>
 )

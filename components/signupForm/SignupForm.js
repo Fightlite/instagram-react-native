@@ -105,6 +105,7 @@ const SignupForm = ({navigation}) => {
                             onChangeText={handleChange('password')}
                             onBlur={handleBlur('password')}
                             value={values.password}
+                            secureTextEntry={true}
                         />
                     </View>
 

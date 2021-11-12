@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, TextInput, Text, StyleSheet, Pressable, TouchableOpacity, Alert } from 'react-native'
 import { auth, db } from '../../firebase'
 

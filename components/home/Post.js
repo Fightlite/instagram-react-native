@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback }from 'react'
+import React, { useCallback }from 'react'
 import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground} from 'react-native'
 import { postFooterIcons } from '../../data/postFooterIcons'
 import { auth, db } from '../../firebase'
@@ -12,9 +12,7 @@ const Post = ({ post }) => {
     const handleLike = (post) => {
         const currentLikeStatus = !post.likes_by_users.includes(auth.currentUser.email)
 
-        db.collection('users')
-        .doc(post.user_email)
-        .collection('posts')
+        db.collection('posts')
         .doc(post.id)
         .update({
             likes_by_users: currentLikeStatus ?

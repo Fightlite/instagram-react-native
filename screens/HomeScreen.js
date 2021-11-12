@@ -6,9 +6,6 @@ import Post from '../components/home/Post'
 import BottomTabs from '../components/home/BottomTabs'
 import { db } from '../firebase'
 
-import { bottomTabIcons } from '../data/bottomTabIcons'
-
-
 const HomeScreen = ({ navigation }) => {
     const [ posts, setPosts ] = useState([])
 
@@ -29,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
                     <Post key={index} post={post} />
                 ))}
             </ScrollView>
-            <BottomTabs icons={bottomTabIcons} />
+            <BottomTabs navigation={navigation} />
         </SafeAreaView>
     )
 }
