@@ -24,26 +24,21 @@ const ProfileScreen = ({ navigation }) => {
         }
     }
 
-    const fetchPosts = async () => {
-        try {
-            const authUser = firebase.auth().currentUser;
-
-            await db.collectionGroup('posts')
-            .where('userId', '==', authUser.uid)
-            .orderBy('createdAt', 'desc')
-            .onSnapshot( snapshot => {
-                setPosts(snapshot.docs.map(post => ({ id: post.id, ...post.data()}) ))
-            })
-            console.log(posts)
-
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
     useEffect(() => {
         getUser();
-        fetchPosts();
+
+        // fetchPosts;
+        const authUser = firebase.auth().currentUser;
+        const unsub = db.collectionGroup('posts')
+        .where('userId', '==', authUser.uid)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot( snapshot => {
+            setPosts(snapshot.docs.map(post => ({ id: post.id, ...post.data()}) ))
+        })
+
+        // Stop listening for changes
+        return () => { unsub() };
+
     }, [])
     
     return (

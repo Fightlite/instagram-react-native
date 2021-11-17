@@ -10,11 +10,17 @@ const HomeScreen = ({ navigation }) => {
     const [ posts, setPosts ] = useState([])
 
     useEffect(()=> {
-        db.collectionGroup('posts')
+        const unsub = db.collectionGroup('posts')
         .orderBy('createdAt', 'desc')
-        .onSnapshot( snapshot => {
+        .onSnapshot( (snapshot) => {
             setPosts(snapshot.docs.map(post => ({ id: post.id, ...post.data()}) ))
         })
+
+        // Stop listening for changes
+        return () => {
+            unsub()
+        };
+
     }, [])
 
     return (
